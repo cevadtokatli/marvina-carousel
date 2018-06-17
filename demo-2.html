@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Marvina Carousel Demo</title>
+<link rel="stylesheet" href="assets/css/marvina-carousel.min.css" />
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body style="background:#ddd;">
+<div id="demo-2">
+    <script>
+        for(var i=0; i<10; i++) {
+            document.write([
+                '<div class="mc-carousel-element">',
+                    '<img src="assets/icons/user.svg" />',
+                    '<span class="name">John Doe</span>',
+                    '<span class="position">Front-end Developer</span>',
+                    '<div class="socials">',
+                        '<img src="assets/icons/facebook.svg" />',
+                        '<img src="assets/icons/twitter.svg" />',
+                        '<img src="assets/icons/google-plus.svg" />',
+                        '<img src="assets/icons/linkedin.svg" />',
+                    '</div>',
+                    '<hr />',
+                    '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce congue augue sem, quis facilisis leo.</p>',
+                '</div>'
+            ].join(''))
+        }
+    </script>
+</div>
+<script src="assets/js/marvina-carousel.min.js"></script>
+<script>
+var carousel = new MarvinaCarousel({
+    el: '#demo-2',
+    minImage: 1,
+    maxImage: 3,
+    minWidth: 200,
+    maxWidth: 400,
+    space: 15
+});
+</script>
+</body>
+</html>

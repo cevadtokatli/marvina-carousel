@@ -1,0 +1,205 @@
+*,
+*:before,
+*:after {
+    box-sizing:border-box;
+    padding:0;
+    margin:0;
+}
+html,
+body {
+    min-height:100%;
+    font-family:sans-serif;
+}
+body.background {
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-image:url('http://52.224.223.200/libraries/marvina-carousel/demo-images/background.jpg');
+}
+body.background:before {
+    content: '';
+    position: fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    z-index:-1;
+    background:rgba(0,0,0,.7);
+}
+
+#demo-1 {
+    display:-webkit-flex;
+    display:-ms-flex;
+    display:flex;
+    -webkit-align-items:center;
+    -ms-align-items:center;
+    align-items:center;
+    margin:25px;
+}
+#demo-1 .mc-carousel {
+    -webkit-flex:1 1 auto;
+    -ms-flex:1 1 auto;
+    flex:1 1 auto;
+    -webkit-order:2;
+    -ms-order:2;
+    order:2;
+}
+#demo-1 .mc-carousel .mc-carousel-element {
+    height:100%;
+}
+#demo-1 .mc-arrow {
+    position:static;
+    -webkit-flex:0 0 auto;
+    -ms-flex:0 0 auto;
+    flex:0 0 auto;
+    margin:0;
+}
+#demo-1 .mc-arrow svg {
+    fill:#e84427;
+}
+#demo-1 .mc-arrow.mc-arrow.mc-prev-arrow {
+    -webkit-order:1;
+    -ms-order:1;
+    order:1;
+}
+#demo-1 .mc-arrow.mc-arrow.mc-next-arrow {
+    -webkit-order:3;
+    -ms-order:3;
+    order:3;
+}
+#demo-1 .mc-autoplay-container {
+    right:55px;
+    top:5px;
+}
+#demo-1 .mc-autoplay-container > * {
+    fill:rgba(232, 68, 39, 0.4);
+}
+#demo-1 .mc-autoplay-container:hover > * {
+    fill:#e84427;
+}
+
+#demo-2 {
+    display:-webkit-flex;
+    display:-ms-flex;
+    display:flex;
+    -webkit-flex-wrap:wrap;
+    -ms-flex-wrap:wrap;
+    flex-wrap:wrap;
+    -webkit-align-items:center;
+    -ms-align-items:center;
+    align-items:center;
+    max-width:1140px;
+    margin:auto;
+    margin-top:50px;
+}
+#demo-2 > ul {
+    position:static;
+    -webkit-order:4;
+    -ms-order:4;
+    order:4;
+    width:100%;
+    margin:15px 0;
+}
+#demo-2 > ul > li {
+    background:#B491B6;
+}
+#demo-2 > ul > li.mc-active {
+    background:#8D678F;
+}
+#demo-2 .mc-arrow {
+    position:static;
+    width:65px;
+    margin-top:40px;
+}
+#demo-2 .mc-arrow svg {
+    fill:#8D678F;
+}
+#demo-2 .mc-arrow.mc-prev-arrow {
+    -webkit-order:1;
+    -ms-order:1;
+    order:1;
+    padding-right:15px;
+}
+#demo-2 .mc-arrow.mc-next-arrow {
+    -webkit-order:3;
+    -ms-order:3;
+    order:3;
+    padding-left:15px;
+}
+#demo-2 .mc-carousel {
+    -webkit-flex:1 1 auto;
+    -ms-flex:1 1 auto;
+    flex:1 1 auto;
+    -webkit-order:2;
+    -ms-order:2;
+    order:2;
+    width:calc(100% - 130px);
+    padding-top:70px;
+}
+#demo-2 .mc-carousel-element {
+    position:relative;
+    display:-webkit-flex;
+    display:-ms-flex;
+    display:flex;
+    -webkit-flex-direction:column;
+    -ms-flex-direction:column;
+    flex-direction:column;
+    -webkit-align-items:center;
+    -ms-align-items:center;
+    align-items:center;
+    background:#FFF;
+}
+#demo-2 .mc-carousel-element > img {
+    position:absolute;
+    width:120px;
+    left:calc(50% - 60px);
+    top:-70px;
+    margin:auto;
+}
+#demo-2 .mc-carousel-element .name {
+    margin:60px 0 10px 0;
+    font-weight:600;
+}
+#demo-2 .mc-carousel-element .position {
+    color:#999;
+}
+#demo-2 .mc-carousel-element .socials {
+    display:-webkit-flex;
+    display:-ms-flex;
+    display:flex;
+    -webkit-justify-content:center;
+    -ms-justify-content:center;
+    justify-content:center;
+}
+#demo-2 .mc-carousel-element .socials > img {
+    -webkit-flex:0 0 auto;
+    -ms-flex:0 0 auto;
+    flex:0 0 auto;
+    width:25px;
+    height:25px;
+    margin:10px;
+}
+#demo-2 .mc-carousel-element hr {
+    width:calc(100% - 30px);
+    height:1px;
+    margin:auto;
+    border:0;
+    background:#ddd;
+}
+#demo-2 .mc-carousel-element p {
+    width:calc(100% - 30px);
+    margin:15px auto;
+}
+@media(max-width:420px) {
+    #demo-1 {
+        margin:5px;
+    }
+    #demo-2 {
+        padding:0 15px;
+    }
+    #demo-2 .mc-arrow {
+        display:none;
+    }
+    #demo-2 .mc-carousel {
+        width:100%;
+    }
+}
