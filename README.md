@@ -64,7 +64,7 @@ asNextArrow | string \| HTMLElement* | null | Declares the given element as the 
 autoPlay | boolean | false | Enables auto play of slides.
 autoPlaySpeed | number | 5000 | Sets auto play interval. *(as milliseconds)*
 
-<span style="font-size:.9rem;">*: You can give a HTML element or a CSS selector (like `#carousel`, `.container > div:first-child`)</span>
+<span style="font-size:.9rem;">*: You can give an HTML element or a CSS selector (like `#carousel`, `.container > div:first-child`)</span>
 
 #### As List
 You can convert an HTML list element as a carousel list that shows the current index and works as a pager. 
@@ -145,7 +145,7 @@ setDuration | duration: number | void | Sets duration.
 getAutoPlaySpeed | | number | Returns auto play speed.
 setAutoPlaySpeed | speed: number | void | Sets auto play speed.
 
-<span style="font-size:.9rem;">*: You can give a HTML element or a CSS selector (like `#carousel`, `.container > div:first-child`)</span>
+<span style="font-size:.9rem;">*: You can give an HTML element or a CSS selector (like `#carousel`, `.container > div:first-child`)</span>
 
 ## IE Support
 IE 10 is not supported and patches to fix problems will not be accepted.
