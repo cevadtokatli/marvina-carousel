@@ -67,7 +67,7 @@ autoPlaySpeed | number | 5000 | Sets auto play interval. *(as milliseconds)*
 <span style="font-size:.9rem;">*: You can give an HTML element or a CSS selector (like `#carousel`, `.container > div:first-child`)</span>
 
 #### As List
-You can convert an HTML list element as a carousel list that shows the current index and works as a pager. 
+You can convert an HTML list element to a carousel list that shows the current index and works as a pager. 
 * It can be a `ul` or `ol` element.
 * It can be placed anywhere in the `body`.
 * List is updated when the current index is changed.
