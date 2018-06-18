@@ -58,7 +58,7 @@ space | number | 0 | Specifies the space between the carousel elements. *(as pix
 touchMove | boolean | true | Enables slide transitive with touch.
 list | boolean | true | Displays a list at the bottom of the carousel.
 [asList](#as-list) | string \| HTMLUListElement \| HTMLOListElement* | null | Declares the given list as the carousel list.
-arrows | boolean | true | Displays right and left arrows to change the image.
+arrows | boolean | true | Displays right and left arrows to change the index.
 asPrevArrow | string \| HTMLElement* | null | Declares the given element as the prev arrow.
 asNextArrow | string \| HTMLElement* | null | Declares the given element as the next arrow.
 autoPlay | boolean | false | Enables auto play of slides.
