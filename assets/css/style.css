@@ -11,21 +11,8 @@ body {
     font-family:sans-serif;
 }
 body.background {
-    background-size:cover;
-    background-repeat:no-repeat;
-    background-image:url('http://52.224.223.200/libraries/marvina-carousel/demo-images/background.jpg');
-}
-body.background:before {
-    content: '';
-    position: fixed;
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
-    z-index:-1;
     background:rgba(0,0,0,.7);
 }
-
 #demo-1 {
     display:-webkit-flex;
     display:-ms-flex;
