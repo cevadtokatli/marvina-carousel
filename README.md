@@ -4,7 +4,12 @@ For more information you can take a look at the demos: [Demo 1](https://cevadtok
 
 ## NPM
 ``` 
-npm install --save marvina-carousel 
+npm install --save-dev marvina-carousel 
+```
+
+## Yarn
+```
+yarn add marvina-carousel --dev
 ```
 
 ## Installation
