@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
 const cssmin = require('gulp-cssmin');
 const uglify = require('gulp-uglify');
 const rollup = require('rollup');
@@ -14,6 +15,10 @@ gulp.task('scss', async () => {
     await new Promise(resolve => {
         gulp.src('./src/scss/marvina-carousel.scss')
         .pipe(sass())
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
         .on('error', e => {
             console.log(e);
             resolve();

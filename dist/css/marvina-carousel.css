@@ -5,17 +5,17 @@
     height: 100%; }
     .mc .mc-carousel .mc-container,
     .mc .mc-carousel .mc-wrapper {
-      display: -webkit-flex;
-      display: -ms-flex;
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
-      -webkit-align-items: flex-start;
-      -ms-align-items: flex-start;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
       align-items: flex-start;
       width: 100%;
       height: 100%; }
     .mc .mc-carousel .mc-wrapper {
-      -webkit-justify-content: center;
-      -ms-justify-content: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
       justify-content: center; }
       .mc .mc-carousel .mc-wrapper > .mc-carousel-element:last-child {
         margin-right: 0 !important; }
@@ -24,7 +24,7 @@
         pointer-events: none; }
     .mc .mc-carousel .mc-wrapper,
     .mc .mc-carousel .mc-carousel-element {
-      -webkit-flex: 0 0 auto;
+      -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
       flex: 0 0 auto; }
     .mc .mc-carousel .mc-carousel-element,
@@ -39,21 +39,20 @@
     right: 15px;
     bottom: 10px;
     z-index: 6;
-    display: -webkit-flex;
-    display: -ms-flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-justify-content: center;
-    -ms-justify-content: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
-    -webkit-align-items: center;
-    -ms-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     list-style: none; }
     .mc > ul li {
-      -webkit-flex: 0 0 auto;
+      -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
       flex: 0 0 auto;
       width: 10px;
@@ -62,13 +61,14 @@
       border-radius: 100%;
       background: rgba(235, 235, 235, 0.4);
       -webkit-transition: 175ms 0s linear;
-      -ms-transition: 175ms 0s linear;
       transition: 175ms 0s linear;
-      -webkit-transition-property: background-color, box-shadow;
-      -ms-transition-property: background-color, box-shadow;
-      transition-property: background-color, box-shadow; }
+      -webkit-transition-property: background-color, -webkit-box-shadow;
+      transition-property: background-color, -webkit-box-shadow;
+      transition-property: background-color, box-shadow;
+      transition-property: background-color, box-shadow, -webkit-box-shadow; }
       .mc > ul li.mc-active {
         background-color: #EBEBEB;
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(236, 236, 236, 0.4);
         box-shadow: 0px 0px 5px 0px rgba(236, 236, 236, 0.4); }
   .mc .mc-arrow {
     position: absolute;
@@ -102,7 +102,6 @@
       height: 35px;
       fill: rgba(255, 255, 255, 0.5);
       -webkit-transition: fill 200ms 0s linear, opacity 100ms 0s linear;
-      -ms-transition: fill 200ms 0s linear, opacity 100ms 0s linear;
       transition: fill 200ms 0s linear, opacity 100ms 0s linear; }
     .mc .mc-autoplay-container:hover > svg {
       fill: #FFF; }
