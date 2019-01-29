@@ -2421,7 +2421,7 @@ var Solo$1 = Solo = function () {
       var iterator;
       iterator = this.removeElementIterator.apply(this, arguments);
       iterator.next();
-      if (index <= this.index) {
+      if (index <= this.index && this.index !== 0) {
         this.index -= 1;
         if (this.list) {
           this.list.index = this.index;

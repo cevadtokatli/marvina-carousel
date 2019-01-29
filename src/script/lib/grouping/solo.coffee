@@ -94,7 +94,7 @@ export default class Solo
         iterator = @removeElementIterator arguments...
         iterator.next()
 
-        if index <= @index
+        if index <= @index && @index != 0
             @index -= 1
             if @list
                 @list.index = @index
