@@ -88,7 +88,7 @@
 	   * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
 	   * @license   Licensed under MIT license
 	   *            See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE
-	   * @version   v4.2.4+314e4831
+	   * @version   v4.2.5+7f2b526d
 	   */
 
 	  (function (global, factory) {
@@ -519,9 +519,7 @@
 	        succeeded = true;
 	      }
 
-	      if (promise._state !== PENDING) {
-	        // noop
-	      } else if (hasCallback && succeeded) {
+	      if (promise._state !== PENDING) ; else if (hasCallback && succeeded) {
 	        resolve(promise, value);
 	      } else if (failed) {
 	        reject(promise, error);
@@ -1184,15 +1182,19 @@
 	        var promise = this;
 	        var constructor = promise.constructor;
 
-	        return promise.then(function (value) {
-	          return constructor.resolve(callback()).then(function () {
-	            return value;
+	        if (isFunction(callback)) {
+	          return promise.then(function (value) {
+	            return constructor.resolve(callback()).then(function () {
+	              return value;
+	            });
+	          }, function (reason) {
+	            return constructor.resolve(callback()).then(function () {
+	              throw reason;
+	            });
 	          });
-	        }, function (reason) {
-	          return constructor.resolve(callback()).then(function () {
-	            throw reason;
-	          });
-	        });
+	        }
+
+	        return promise.then(callback, callback);
 	      };
 
 	      return Promise;
@@ -1251,14 +1253,7 @@
 	  
 	});
 
-	var es6Promise$1 = /*#__PURE__*/Object.freeze({
-		default: es6Promise,
-		__moduleExports: es6Promise
-	});
-
-	var require$$0 = ( es6Promise$1 && es6Promise ) || es6Promise$1;
-
-	var auto = require$$0.polyfill();
+	var auto = es6Promise.polyfill();
 
 	var runtime = createCommonjsModule(function (module) {
 	  /**
@@ -1959,13 +1954,6 @@
 	  }() || Function("return this")());
 	});
 
-	var runtime$1 = /*#__PURE__*/Object.freeze({
-		default: runtime,
-		__moduleExports: runtime
-	});
-
-	var require$$0$1 = ( runtime$1 && runtime ) || runtime$1;
-
 	/**
 	 * Copyright (c) 2014-present, Facebook, Inc.
 	 *
@@ -1989,7 +1977,7 @@
 	// Force reevalutation of runtime.js.
 	g.regeneratorRuntime = undefined;
 
-	var runtimeModule = require$$0$1;
+	var runtimeModule = runtime;
 
 	if (hadRuntime) {
 	  // Restore the original runtime.
@@ -2003,14 +1991,7 @@
 	  }
 	}
 
-	var runtimeModule$1 = /*#__PURE__*/Object.freeze({
-		default: runtimeModule,
-		__moduleExports: runtimeModule
-	});
-
-	var require$$0$2 = ( runtimeModule$1 && runtimeModule ) || runtimeModule$1;
-
-	var regenerator = require$$0$2;
+	var regenerator = runtimeModule;
 
 	var Util;
 
@@ -2150,6 +2131,8 @@
 	        this.totalIndex = totalIndex;
 	        this.index = 0;
 	        this.container.setAttribute('style', Util$1.setCSSPrefix("transform:translateX(0)"));
+	      } else {
+	        this.container.setAttribute('style', Util$1.setCSSPrefix('transform:translateX(' + (this.index * this.elWidth + this.index * this.space) * -1 + 'px)'));
 	      }
 	      wrappers = this.container.querySelectorAll('.mc-wrapper');
 	      for (i = j = 0, ref = this.totalIndex - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {

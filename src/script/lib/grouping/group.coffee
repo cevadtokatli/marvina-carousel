@@ -16,6 +16,8 @@ export default class Group
             @totalIndex = totalIndex
             @index = 0
             @container.setAttribute 'style', Util.setCSSPrefix("transform:translateX(0)")
+        else
+            @container.setAttribute 'style', Util.setCSSPrefix("transform:translateX(#{((@index * @elWidth) + (@index * @space)) * -1}px)")
 
         wrappers = @container.querySelectorAll '.mc-wrapper'
         for i in [0..@totalIndex-1]
