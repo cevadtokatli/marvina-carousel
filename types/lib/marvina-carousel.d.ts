@@ -8,8 +8,8 @@ export declare class MarvinaCarousel {
     el: HTMLElement;
 	carouselEl: HTMLDivElement;
 	container: HTMLDivElement;
-	elements: HTMLElement[];
-	cloneElements: HTMLElement[];
+	elements: HTMLElement[]|NodeList;
+	cloneElements: HTMLElement[]|NodeList;
 	elWidth: number;
 	width: number;
 	timing: string;
@@ -29,6 +29,9 @@ export declare class MarvinaCarousel {
 	autoPlayStatus: boolean;
 	autoPlayContainer: HTMLDivElement;
 	autoPlayInterval: number;
+	init: boolean;
+	o: Options;
+	imageCount: number;
 	index: number;
 	total: number;
 	totalIndex: number;
@@ -40,7 +43,10 @@ export declare class MarvinaCarousel {
     addElement: Group.AddElement;
     removeElement: Group.RemoveElement;
     
-    constructor(o?:Options);
+	constructor(o?:Options);
+	initDOM(): void;
+	initCarousel(): void;
+	initSettingsElements(): void;
 	extractAttributes(o:Options): void;
 	addElementIterator(el:HTMLElement, index:number): void;
 	add(el:string|HTMLElement, index:number): void;
@@ -61,6 +67,7 @@ export declare class MarvinaCarousel {
 	setCarouselAnimationIterator(index:number, next:boolean, auto:boolean): void;
 	applyTransition(): void;
 	resizeIterator(): void;
+	calculateResize(total?:number): void;
 	getIndex(): number;
 	setIndex(index:number): Promise<boolean>;
 	getTotal(): number;

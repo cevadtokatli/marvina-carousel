@@ -19,4 +19,6 @@ export interface Grouping {
     setCarouselAnimation: SetCarouselAnimation;
     addElement: AddElement;
     removeElement: RemoveElement;
+    removeCloneElements?: () => void;
+    setTotalIndex?: (imageCount:number) => void;
 }

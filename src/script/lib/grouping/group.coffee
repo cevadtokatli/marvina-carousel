@@ -11,14 +11,8 @@ export default class Group
         else
             $ = $.value
 
-        totalIndex = Math.ceil @total / $.imageCount
-        unless @totalIndex == totalIndex
-            @totalIndex = totalIndex
-            @index = 0
-            @container.setAttribute 'style', Util.setCSSPrefix("transform:translateX(0)")
-        else
-            @container.setAttribute 'style', Util.setCSSPrefix("transform:translateX(#{((@index * @elWidth) + (@index * @space)) * -1}px)")
-
+        @Group.setTotalIndex.call @, $.imageCount
+    
         wrappers = @container.querySelectorAll '.mc-wrapper'
         for i in [0..@totalIndex-1]
             unless wrapper = wrappers[i]
@@ -108,3 +102,15 @@ export default class Group
         iterator = @removeElementIterator arguments...
         iterator.next()
         iterator.next()
+
+    # Sets total index.
+    # @params {Number} imageCount
+    @setTotalIndex: (imageCount) ->
+        totalIndex = Math.ceil @total / imageCount
+
+        unless @totalIndex == totalIndex
+            @totalIndex = totalIndex
+            @index = 0
+            @container.setAttribute 'style', Util.setCSSPrefix("transform:translateX(0)")
+        else
+            @container.setAttribute 'style', Util.setCSSPrefix("transform:translateX(#{((@index * @elWidth) + (@index * @space)) * -1}px)")

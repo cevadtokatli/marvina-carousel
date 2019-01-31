@@ -10,4 +10,5 @@ export default {
     arrows: true
     autoPlay: false
     autoPlaySpeed: 5000
+    init: true
 }

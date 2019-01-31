@@ -9,8 +9,9 @@ export default class List
             @carousel.el.appendChild @listEl
             @listEl.addEventListener Util.events.mousedown, @setIndex, true
 
-            for i in [0..@carousel.totalIndex-1]
-                @add()
+            if @carousel.totalIndex > 0
+                for i in [0..@carousel.totalIndex-1] 
+                    @add()
 
         if @asList
             @asList.addEventListener Util.events.mousedown, @setIndex, true

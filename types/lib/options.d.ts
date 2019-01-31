@@ -17,4 +17,5 @@ export interface Options {
     asNextArrow?: string|HTMLElement;
     autoPlay?: boolean;
     autoPlaySpeed?: number;
+    init?: boolean;
 }

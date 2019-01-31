@@ -1,6 +1,6 @@
 /*!
  *   Marvina carousel
- *   version: 1.0.4
+ *   version: 1.0.5
  *    author: Cevad Tokatli <cevadtokatli@hotmail.com>
  *   website: http://cevadtokatli.com
  *    github: https://github.com/cevadtokatli/marvina-carousel
@@ -2077,15 +2077,18 @@ Util = function () {
       key: 'createEvent',
       value: function createEvent(name) {
         var event;
-        event = document.createEvent('HTMLEvents') || document.createEvent('event');
-        event.initEvent(name, false, true);
+        event = null;
+        if (typeof document !== 'undefined') {
+          event = document.createEvent('HTMLEvents') || document.createEvent('event');
+          event.initEvent(name, false, true);
+        }
         return event;
       }
     }]);
     return Util;
   }();
 
-  Util.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  Util.isMobile = typeof navigator !== 'undefined' ? /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) : false;
 
   Util.events = {
     mousedown: Util.isMobile ? 'touchstart' : 'mousedown',
@@ -2112,7 +2115,7 @@ var Group$1 = Group = function () {
     // @params {Boolean} skip
     value: function resize() {
 
-      var $, e, i, iterator, j, k, l, len, len1, len2, m, n, o, p, r, ref, ref1, ref2, ref3, ref4, ref5, s, spaceElements, totalIndex, wrapper, wrappers;
+      var $, e, i, iterator, j, k, l, len, len1, len2, m, n, o, p, r, ref, ref1, ref2, ref3, ref4, ref5, s, spaceElements, wrapper, wrappers;
       iterator = this.resizeIterator.apply(this, arguments);
       $ = iterator.next();
       if ($.done) {
@@ -2120,14 +2123,7 @@ var Group$1 = Group = function () {
       } else {
         $ = $.value;
       }
-      totalIndex = Math.ceil(this.total / $.imageCount);
-      if (this.totalIndex !== totalIndex) {
-        this.totalIndex = totalIndex;
-        this.index = 0;
-        this.container.setAttribute('style', Util$1.setCSSPrefix("transform:translateX(0)"));
-      } else {
-        this.container.setAttribute('style', Util$1.setCSSPrefix('transform:translateX(' + (this.index * this.elWidth + this.index * this.space) * -1 + 'px)'));
-      }
+      this.Group.setTotalIndex.call(this, $.imageCount);
       wrappers = this.container.querySelectorAll('.mc-wrapper');
       for (i = j = 0, ref = this.totalIndex - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         if (!(wrapper = wrappers[i])) {
@@ -2267,6 +2263,23 @@ var Group$1 = Group = function () {
       iterator = this.removeElementIterator.apply(this, arguments);
       iterator.next();
       return iterator.next();
+    }
+
+    // Sets total index.
+    // @params {Number} imageCount
+
+  }, {
+    key: 'setTotalIndex',
+    value: function setTotalIndex(imageCount) {
+      var totalIndex;
+      totalIndex = Math.ceil(this.total / imageCount);
+      if (this.totalIndex !== totalIndex) {
+        this.totalIndex = totalIndex;
+        this.index = 0;
+        return this.container.setAttribute('style', Util$1.setCSSPrefix("transform:translateX(0)"));
+      } else {
+        return this.container.setAttribute('style', Util$1.setCSSPrefix('transform:translateX(' + (this.index * this.elWidth + this.index * this.space) * -1 + 'px)'));
+      }
     }
   }]);
   return Group;
@@ -2542,15 +2555,18 @@ Util$2 = function () {
       key: 'createEvent',
       value: function createEvent(name) {
         var event;
-        event = document.createEvent('HTMLEvents') || document.createEvent('event');
-        event.initEvent(name, false, true);
+        event = null;
+        if (typeof document !== 'undefined') {
+          event = document.createEvent('HTMLEvents') || document.createEvent('event');
+          event.initEvent(name, false, true);
+        }
         return event;
       }
     }]);
     return Util;
   }();
 
-  Util.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  Util.isMobile = typeof navigator !== 'undefined' ? /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) : false;
 
   Util.events = {
     mousedown: Util.isMobile ? 'touchstart' : 'mousedown',
@@ -2652,8 +2668,10 @@ var List$1 = List = function () {
         this.listEl = document.createElement('ul');
         this.carousel.el.appendChild(this.listEl);
         this.listEl.addEventListener(Util$3.events.mousedown, this.setIndex, true);
-        for (i = j = 0, ref = this.carousel.totalIndex - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-          this.add();
+        if (this.carousel.totalIndex > 0) {
+          for (i = j = 0, ref = this.carousel.totalIndex - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+            this.add();
+          }
         }
       }
       if (this.asList) {
@@ -2816,7 +2834,8 @@ var defaultOptions = {
   list: true,
   arrows: true,
   autoPlay: false,
-  autoPlaySpeed: 5000
+  autoPlaySpeed: 5000,
+  init: true
 };
 
 var MarvinaCarousel;
@@ -2827,89 +2846,124 @@ var marvinaCarousel = MarvinaCarousel = function () {
     var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultOptions;
     classCallCheck(this, MarvinaCarousel);
 
-    var c, e, elements, j, k, len, len1, wrapper;
+    // dont install if runs on the server.
+    if (typeof window === 'undefined') {
+      return;
+    }
     this.extractAttributes(o);
+    this.o = o;
     if (!(this.el = Util$3.getElement(o.el))) {
       throw new Error('Element could not be found');
     }
-    this.el.classList.add('mc');
     // group
     this.Group = this.group ? Group$1 : Solo$1;
     this.resize = this.Group.resize.bind(this);
     this.setCarouselAnimation = this.Group.setCarouselAnimation.bind(this);
     this.addElement = this.Group.addElement.bind(this);
     this.removeElement = this.Group.removeElement.bind(this);
-    // elements & carousel
-    this.carouselEl = document.createElement('div');
-    this.carouselEl.classList.add('mc-carousel');
-    this.carouselEl.innerHTML = '<div class="mc-container"></div>';
-    if (c = this.el.childNodes[0]) {
-      this.el.insertBefore(this.carouselEl, c);
-    } else {
-      this.el.appendChild(this.carouselEl);
+    if (this.init) {
+      this.initDOM();
     }
-    this.container = this.carouselEl.querySelector('div');
-    elements = this.el.querySelectorAll('.mc-carousel-element');
-    this.elements = [];
-    if (this.group) {
-      wrapper = document.createElement('div');
-      wrapper.classList.add('mc-wrapper');
-      wrapper.style.marginRight = this.space + 'px';
-      this.container.appendChild(wrapper);
-      for (j = 0, len = elements.length; j < len; j++) {
-        e = elements[j];
-        e.style.marginRight = this.space + 'px';
-        wrapper.appendChild(e);
-        this.elements.push(e);
-      }
-    } else {
-      this.cloneElements = [];
-      for (k = 0, len1 = elements.length; k < len1; k++) {
-        e = elements[k];
-        e.style.marginRight = this.space + 'px';
-        this.container.appendChild(e);
-        this.elements.push(e);
-      }
-      this.totalIndex = this.elements.length;
-      this.index = 0;
-    }
-    this.total = this.elements.length;
-    this.resize();
-    if (o.touchMove) {
-      // touchMove
-      this.touchMove = new TouchMove$1(this);
-    }
-    if (o.list || o.asList) {
-      // list / asList
-      this.list = new List$1(this, o.list, o.asList);
-    }
-    if (o.arrows || o.asPrevArrow || o.asNextArrow) {
-      // arrows / prevArrow / nextArrow
-      this.arrows = new Arrows$1(this, o.arrows, {
-        prevArrow: o.asPrevArrow,
-        nextArrow: o.asNextArrow
-      });
-    }
-
-    // auto playing
-    if (this.autoPlay) {
-      this.autoPlayStatus = true;
-      this.autoPlayContainer = document.createElement('div');
-      this.autoPlayContainer.className = 'mc-autoplay-container mc-active';
-      this.autoPlayContainer.innerHTML = ['<svg class="mc-play" viewBox="0 0 48 48"> \t\t\t\t\t\t<path d="M16 10v28l22-14z"></path> \t\t\t\t\t</svg>', '<svg class="mc-stop" viewBox="0 0 512 512"> \t\t\t\t\t\t<rect height="320" width="60" x="153" y="96"></rect><rect height="320" width="60" x="299" y="96"></rect> \t\t\t\t\t</svg>'].join('');
-      this.autoPlayContainer.addEventListener(Util$3.events.mousedown, this.toggle.bind(this), true);
-      this.setAutoPlayInterval(false);
-      this.el.appendChild(this.autoPlayContainer);
-    }
-    window.addEventListener('resize', this.resize, true);
-    this.resize();
   }
 
-  // Extracts attributes from default options.
-  // @params {Object} o
+  // Inits slider with creating DOM.
 
 
   createClass(MarvinaCarousel, [{
+    key: 'initDOM',
+    value: function initDOM() {
+      var c, e, elements, j, k, len, len1, wrapper;
+      this.el.classList.add('mc');
+      // elements & carousel
+      this.carouselEl = document.createElement('div');
+      this.carouselEl.classList.add('mc-carousel');
+      this.carouselEl.innerHTML = '<div class="mc-container"></div>';
+      if (c = this.el.childNodes[0]) {
+        this.el.insertBefore(this.carouselEl, c);
+      } else {
+        this.el.appendChild(this.carouselEl);
+      }
+      this.container = this.carouselEl.querySelector('div');
+      elements = this.el.querySelectorAll('.mc-carousel-element');
+      this.elements = [];
+      if (this.group) {
+        wrapper = document.createElement('div');
+        wrapper.classList.add('mc-wrapper');
+        wrapper.style.marginRight = this.space + 'px';
+        this.container.appendChild(wrapper);
+        for (j = 0, len = elements.length; j < len; j++) {
+          e = elements[j];
+          e.style.marginRight = this.space + 'px';
+          wrapper.appendChild(e);
+          this.elements.push(e);
+        }
+      } else {
+        this.cloneElements = [];
+        for (k = 0, len1 = elements.length; k < len1; k++) {
+          e = elements[k];
+          e.style.marginRight = this.space + 'px';
+          this.container.appendChild(e);
+          this.elements.push(e);
+        }
+        this.totalIndex = this.elements.length;
+        this.index = 0;
+      }
+      this.total = this.elements.length;
+      this.resize();
+      this.initSettingsElements();
+      window.addEventListener('resize', this.resize, true);
+      return this.resize();
+    }
+
+    // Inits carousel without creating DOM.
+
+  }, {
+    key: 'initCarousel',
+    value: function initCarousel() {
+      this.carouselEl = this.el.querySelector('.mc-carousel');
+      this.container = this.carouselEl.querySelector('.mc-container');
+      this.total = this.totalIndex = this.carouselEl.querySelectorAll('.mc-carousel-element').length;
+      this.index = 0;
+      return this.initSettingsElements();
+    }
+
+    // Inits settings elements.
+
+  }, {
+    key: 'initSettingsElements',
+    value: function initSettingsElements() {
+      if (this.o.touchMove) {
+        // touchMove
+        this.touchMove = new TouchMove$1(this);
+      }
+      if (this.o.list || this.o.asList) {
+        // list / asList
+        this.list = new List$1(this, this.o.list, this.o.asList);
+      }
+      if (this.o.arrows || this.o.asPrevArrow || this.o.asNextArrow) {
+        // arrows / prevArrow / nextArrow
+        this.arrows = new Arrows$1(this, this.o.arrows, {
+          prevArrow: this.o.asPrevArrow,
+          nextArrow: this.o.asNextArrow
+        });
+      }
+
+      // auto playing
+      if (this.autoPlay) {
+        this.autoPlayStatus = true;
+        this.autoPlayContainer = document.createElement('div');
+        this.autoPlayContainer.className = 'mc-autoplay-container mc-active';
+        this.autoPlayContainer.innerHTML = ['<svg class="mc-play" viewBox="0 0 48 48"> \t\t\t\t\t\t<path d="M16 10v28l22-14z"></path> \t\t\t\t\t</svg>', '<svg class="mc-stop" viewBox="0 0 512 512"> \t\t\t\t\t\t<rect height="320" width="60" x="153" y="96"></rect><rect height="320" width="60" x="299" y="96"></rect> \t\t\t\t\t</svg>'].join('');
+        this.autoPlayContainer.addEventListener(Util$3.events.mousedown, this.toggle.bind(this), true);
+        this.setAutoPlayInterval(false);
+        return this.el.appendChild(this.autoPlayContainer);
+      }
+    }
+
+    // Extracts attributes from default options.
+    // @params {Object} o
+
+  }, {
     key: 'extractAttributes',
     value: function extractAttributes(o) {
       var attrsKey, j, key, len, results, value;
@@ -2919,7 +2973,7 @@ var marvinaCarousel = MarvinaCarousel = function () {
           o[key] = value;
         }
       }
-      attrsKey = ['timing', 'duration', 'group', 'minImage', 'maxImage', 'minWidth', 'maxWidth', 'height', 'space', 'autoPlay', 'autoPlaySpeed'];
+      attrsKey = ['timing', 'duration', 'group', 'minImage', 'maxImage', 'minWidth', 'maxWidth', 'height', 'space', 'autoPlay', 'autoPlaySpeed', 'init'];
       results = [];
       for (j = 0, len = attrsKey.length; j < len; j++) {
         key = attrsKey[j];
@@ -3360,6 +3414,28 @@ var marvinaCarousel = MarvinaCarousel = function () {
         }
       }, resizeIterator, this);
     })
+
+    // Calculates resize values.
+    // @param {Number} total
+
+  }, {
+    key: 'calculateResize',
+    value: function calculateResize(total) {
+      var $, iterator;
+      iterator = this.resizeIterator(true);
+      $ = iterator.next();
+      if (!$.done) {
+        $ = $.value;
+        this.imageCount = $.imageCount;
+      }
+      if (this.group) {
+        this.Group.setTotalIndex.call(this, this.imageCount);
+      } else {
+        this.total = this.totalIndex = total;
+        this.container.setAttribute('style', Util$3.setCSSPrefix('transform:translateX(-' + (this.index * this.width + this.index * this.space) + 'px)'));
+      }
+      return iterator.next();
+    }
 
     // @returns {Number}
 

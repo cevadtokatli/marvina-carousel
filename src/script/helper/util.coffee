@@ -1,5 +1,5 @@
 class Util
-    @isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test navigator.userAgent
+    @isMobile: if typeof navigator != 'undefined' then /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test navigator.userAgent else false
     @events: {
         mousedown: if @isMobile then 'touchstart' else 'mousedown'
         mouseup: if @isMobile then 'touchend' else 'mouseup'
@@ -49,8 +49,10 @@ class Util
     # @params {String} name
     # @returns {Event}
     @createEvent: (name) ->
-        event = document.createEvent('HTMLEvents') || document.createEvent('event')
-        event.initEvent name, false, true
+        event = null
+        if typeof document != 'undefined'
+            event = document.createEvent('HTMLEvents') || document.createEvent('event')
+            event.initEvent name, false, true
         event
 
 export default Util

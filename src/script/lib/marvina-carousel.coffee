@@ -9,12 +9,14 @@ import events from './events'
 export default class MarvinaCarousel
     # @params {Object} o
     constructor: (o=defaultOptions) ->
+        # dont install if runs on the server.
+        return if typeof window == 'undefined'
+
         @extractAttributes o
+        @o = o
         
         unless @el = Util.getElement(o.el)
             throw new Error 'Element could not be found'
-
-        @el.classList.add 'mc'
 
         # group
         @Group = if @group then Group else Solo
@@ -22,6 +24,12 @@ export default class MarvinaCarousel
         @setCarouselAnimation = @Group.setCarouselAnimation.bind @
         @addElement = @Group.addElement.bind @
         @removeElement = @Group.removeElement.bind @
+
+        @initDOM() if @init
+
+    # Inits slider with creating DOM.
+    initDOM: ->
+        @el.classList.add 'mc'
 
         # elements & carousel
         @carouselEl = document.createElement 'div'
@@ -57,14 +65,29 @@ export default class MarvinaCarousel
         @total = @elements.length
         @resize()
 
+        @initSettingsElements()
+
+        window.addEventListener 'resize', @resize, true
+        @resize()
+
+    # Inits carousel without creating DOM.
+    initCarousel: ->
+        @carouselEl = @el.querySelector '.mc-carousel'
+        @container = @carouselEl.querySelector '.mc-container'
+        @total = @totalIndex = @carouselEl.querySelectorAll('.mc-carousel-element').length
+        @index = 0
+        @initSettingsElements()
+
+    # Inits settings elements.
+    initSettingsElements: ->
         # touchMove
-        @touchMove = new TouchMove @ if o.touchMove
+        @touchMove = new TouchMove @ if @o.touchMove
 
         # list / asList
-        @list = new List @, o.list, o.asList if o.list || o.asList
+        @list = new List @, @o.list, @o.asList if @o.list || @o.asList
 
         # arrows / prevArrow / nextArrow
-        @arrows = new Arrows @, o.arrows, {prevArrow:o.asPrevArrow, nextArrow:o.asNextArrow} if o.arrows || o.asPrevArrow || o.asNextArrow 
+        @arrows = new Arrows @, @o.arrows, {prevArrow:@o.asPrevArrow, nextArrow:@o.asNextArrow} if @o.arrows || @o.asPrevArrow || @o.asNextArrow 
 
         # auto playing
         if @autoPlay
@@ -79,16 +102,13 @@ export default class MarvinaCarousel
             @setAutoPlayInterval(false)
             @el.appendChild @autoPlayContainer
 
-        window.addEventListener 'resize', @resize, true
-        @resize()
-
     # Extracts attributes from default options.
     # @params {Object} o
     extractAttributes: (o) ->
         for key, value of defaultOptions
             o[key] = value unless o[key]?
 
-        attrsKey = ['timing', 'duration', 'group', 'minImage', 'maxImage', 'minWidth', 'maxWidth', 'height', 'space', 'autoPlay', 'autoPlaySpeed']
+        attrsKey = ['timing', 'duration', 'group', 'minImage', 'maxImage', 'minWidth', 'maxWidth', 'height', 'space', 'autoPlay', 'autoPlaySpeed', 'init']
         for key in attrsKey
             @[key] = o[key] if o[key]?
 
@@ -307,10 +327,28 @@ export default class MarvinaCarousel
 
                 @el.dispatchEvent events.totalIndex
             
-            @processing = false                
+            @processing = false
         else
             clearTimeout @processingTimeout if @processingTimeout
             @processingTimeout = setTimeout @resize, 500
+
+    # Calculates resize values.
+    # @param {Number} total
+    calculateResize: (total) ->
+        iterator = @resizeIterator true
+
+        $ = iterator.next()
+        unless $.done
+            $ = $.value
+            @imageCount = $.imageCount
+
+        if @group
+            @Group.setTotalIndex.call @, @imageCount
+        else
+            @total = @totalIndex = total
+            @container.setAttribute 'style', Util.setCSSPrefix("transform:translateX(-#{(@index * @width) + (@index * @space)}px)")
+
+        iterator.next()
 
     # @returns {Number}
     getIndex: ->
