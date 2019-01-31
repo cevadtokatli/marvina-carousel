@@ -157,3 +157,6 @@ IE 10 is not supported and patches to fix problems will not be accepted.
 
 ## License
 Marvina Carousel is provided under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Related Projects
+* [Marvina Carousel React](https://github.com/cevadtokatli/marvina-carousel-react)

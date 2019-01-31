@@ -1,6 +1,6 @@
 /*!
  *   Marvina carousel
- *   version: 1.0.5
+ *   version: 1.0.6
  *    author: Cevad Tokatli <cevadtokatli@hotmail.com>
  *   website: http://cevadtokatli.com
  *    github: https://github.com/cevadtokatli/marvina-carousel
